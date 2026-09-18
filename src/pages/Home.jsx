@@ -100,10 +100,10 @@ export function Home() {
               <div className="flex gap-4 mb-8">
                 {['12', '45', '30'].map((time, i) => (
                   <div key={i} className="flex flex-col items-center">
-                    <div className="bg-white text-primary-900 text-2xl md:text-3xl font-bold w-16 h-16 md:w-20 md:h-20 rounded-xl flex items-center justify-center shadow-lg">
+                    <div className="bg-white text-primary-900 dark:bg-white dark:text-primary-900 text-2xl md:text-3xl font-bold w-16 h-16 md:w-20 md:h-20 rounded-xl flex items-center justify-center shadow-lg">
                       {time}
                     </div>
-                    <span className="text-xs mt-2 uppercase font-semibold text-primary-200">
+                    <span className="text-xs mt-2 uppercase font-semibold text-white dark:text-white">
                       {['Hours', 'Minutes', 'Seconds'][i]}
                     </span>
                   </div>
@@ -111,7 +111,7 @@ export function Home() {
               </div>
 
               <Link to="/products?discount=50">
-                <Button size="lg" className="bg-white text-primary-600 hover:bg-gray-100 font-bold px-8">
+                <Button size="lg" className="bg-white text-primary-600 hover:bg-gray-100 dark:bg-white dark:text-primary-700 dark:hover:bg-gray-200 font-bold px-8">
                   Shop Deals Now
                 </Button>
               </Link>

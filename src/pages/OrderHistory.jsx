@@ -28,9 +28,10 @@ export function OrderHistory() {
     }
   }, [user]);
 
-  if (!user) {
-    return <Navigate to="/login" state={{ from: { pathname: '/orders' } }} replace />;
-  }
+  // Removed strict login requirement so guests can view their recent local orders
+  // if (!user) {
+  //   return <Navigate to="/login" state={{ from: { pathname: '/orders' } }} replace />;
+  // }
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -88,7 +89,12 @@ export function OrderHistory() {
                     <div key={index} className="flex gap-4">
                       {item.images && item.images[0] ? (
                         <div className="w-20 h-24 bg-gray-100 rounded-lg overflow-hidden shrink-0">
-                          <img src={item.images[0]} alt={item.name} className="w-full h-full object-cover"/>
+                          <img 
+                            src={item.images[0]} 
+                            alt={item.name} 
+                            className="w-full h-full object-cover"
+                            style={item.imgFilter ? { filter: item.imgFilter } : {}}
+                          />
                         </div>
                       ) : (
                         <div className="w-20 h-24 bg-gray-200 dark:bg-gray-800 rounded-lg shrink-0 flex items-center justify-center">

@@ -18,7 +18,7 @@ export function OrderSuccess() {
           <CheckCircle className="w-12 h-12" />
         </div>
         
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Order Placed!</h1>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Order is successful</h1>
         <p className="text-gray-500 mb-8">Thank you for shopping with Trend Wheel. Your order has been successfully placed.</p>
         
         <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4 mb-8 text-left">

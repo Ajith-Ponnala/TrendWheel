@@ -111,6 +111,7 @@ export function ProductDetails() {
               src={activeImage} 
               alt={product.name} 
               className="w-full h-full object-cover"
+              style={product.imgFilter ? { filter: product.imgFilter } : {}}
             />
           </div>
           

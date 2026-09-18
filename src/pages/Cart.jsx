@@ -218,10 +218,10 @@ export function Cart() {
             </div>
 
             <Button 
-              className="w-full text-base h-12 flex items-center justify-center gap-2"
+              className="w-full text-base font-bold h-14 bg-primary-600 hover:bg-primary-700 flex items-center justify-center gap-2 text-white shadow-lg hover:shadow-xl transition-all"
               onClick={() => navigate('/checkout')}
             >
-              Proceed to Checkout <ChevronRight className="w-5 h-5" />
+              Buy Now <ChevronRight className="w-5 h-5" />
             </Button>
             
             <div className="mt-4 flex items-center justify-center gap-2 text-xs text-gray-500">

@@ -41,8 +41,15 @@ export function Navbar() {
             >
               <Menu className="h-6 w-6" />
             </button>
-            <Link to="/" className="text-2xl font-bold tracking-tighter text-primary-600 dark:text-primary-500">
-              TREND WHEEL
+            <Link to="/" className="flex items-center gap-2 group">
+              <svg className="w-8 h-8 text-primary-600 dark:text-primary-500 group-hover:rotate-180 transition-transform duration-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M4.93 19.07L19.07 4.93"/>
+                <circle cx="12" cy="12" r="3" fill="currentColor"/>
+              </svg>
+              <span className="text-xl md:text-2xl font-bold tracking-tighter text-gray-900 dark:text-white">
+                TREND<span className="text-primary-600 dark:text-primary-500">WHEEL</span>
+              </span>
             </Link>
           </div>
 

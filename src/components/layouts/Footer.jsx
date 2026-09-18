@@ -7,8 +7,15 @@ export function Footer() {
       <div className="container mx-auto px-4 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 mb-12">
           <div>
-            <Link to="/" className="text-2xl font-black text-white tracking-tighter mb-6 block">
-              TREND<span className="text-primary-500">WHEEL</span>
+            <Link to="/" className="flex items-center gap-2 group mb-6">
+              <svg className="w-8 h-8 text-primary-500 group-hover:rotate-180 transition-transform duration-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M4.93 19.07L19.07 4.93"/>
+                <circle cx="12" cy="12" r="3" fill="currentColor"/>
+              </svg>
+              <span className="text-2xl font-black text-white tracking-tighter block">
+                TREND<span className="text-primary-500">WHEEL</span>
+              </span>
             </Link>
             <p className="text-gray-400 text-sm leading-relaxed mb-6">
               Your ultimate destination for modern, premium fashion. Discover the latest trends with unbeatable quality.

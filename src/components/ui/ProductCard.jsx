@@ -34,7 +34,8 @@ export function ProductCard({ product }) {
         <img 
           src={product.images[0]} 
           alt={product.name} 
-          className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+          className="h-full w-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+          style={product.imgFilter ? { filter: product.imgFilter } : {}}
           loading="lazy"
         />
         
