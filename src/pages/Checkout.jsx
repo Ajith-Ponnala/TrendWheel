@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
+import { useNotification } from '../context/NotificationContext';
 import { OrderService } from '../services/api';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
@@ -11,6 +12,7 @@ export function Checkout() {
   const navigate = useNavigate();
   const { cart, getCartTotal, clearCart } = useCart();
   const { user } = useAuth();
+  const { addPersistentNotification } = useNotification();
   
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -117,6 +119,16 @@ export function Checkout() {
       };
       
       const newOrder = await OrderService.placeOrder(orderData);
+      
+      if (user) {
+        addPersistentNotification({
+          title: 'Order Placed Successfully',
+          message: `Your order #${newOrder.id} has been placed and is currently Pending.`,
+          type: 'success',
+          orderId: newOrder.id
+        });
+      }
+
       clearCart();
       navigate('/checkout/success', { state: { orderId: newOrder.id } });
     } catch (error) {

@@ -8,12 +8,15 @@ import { Badge } from '../components/ui/Badge';
 import { Heart, Truck, RefreshCw, ShieldCheck, ChevronRight, Minus, Plus } from 'lucide-react';
 import { LoadingSkeleton, ProductCardSkeleton } from '../components/ui/LoadingSkeleton';
 import { ProductCard } from '../components/ui/ProductCard';
+import { useRecentlyViewed } from '../context/RecentlyViewedContext';
+import { RecentlyViewed } from '../components/ui/RecentlyViewed';
 
 export function ProductDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { addToCart } = useCart();
   const { toggleWishlist, isInWishlist } = useWishlist();
+  const { addViewedProduct } = useRecentlyViewed();
   
   const [product, setProduct] = useState(null);
   const [relatedProducts, setRelatedProducts] = useState([]);
@@ -37,6 +40,7 @@ export function ProductDetails() {
           
           const related = await ProductService.getProductsByCategory(data.category);
           setRelatedProducts(related.filter(p => p.id !== data.id).slice(0, 4));
+          addViewedProduct(data.id);
         }
       } catch (error) {
         console.error("Failed to fetch product details", error);
@@ -303,6 +307,7 @@ export function ProductDetails() {
         </section>
       )}
 
+      <RecentlyViewed />
     </div>
   );
 }

@@ -5,9 +5,11 @@ import { OrderService } from '../../services/api';
 import { Badge } from '../../components/ui/Badge';
 import { Search, Eye } from 'lucide-react';
 import { Input } from '../../components/ui/Input';
+import { useNotification } from '../../context/NotificationContext';
 
 export function OrderManagement() {
   const { isAdmin } = useAuth();
+  const { addPersistentNotification } = useNotification();
   const [orders, setOrders] = useState([]);
   const [search, setSearch] = useState('');
 
@@ -22,9 +24,36 @@ export function OrderManagement() {
   const filteredOrders = orders.filter(o => o.id.toLowerCase().includes(search.toLowerCase()) || (o.shippingAddress?.fullName || '').toLowerCase().includes(search.toLowerCase()));
 
   const handleStatusChange = (orderId, newStatus) => {
-    const updatedOrders = orders.map(o => o.id === orderId ? { ...o, status: newStatus } : o);
+    const order = orders.find(o => o.id === orderId);
+    if (!order) return;
+
+    const validFlow = ['Pending', 'Confirmed', 'Packed', 'Shipped', 'OutForDelivery', 'Delivered'];
+    let updatedTracking = { ...(order.tracking || {}) };
+    const now = new Date().toISOString();
+
+    if (newStatus === 'Cancelled') {
+      updatedTracking.Cancelled = { completed: true, timestamp: now };
+    } else {
+      const targetIndex = validFlow.indexOf(newStatus);
+      validFlow.forEach((stage, idx) => {
+        if (idx <= targetIndex) {
+          if (!updatedTracking[stage]?.completed) {
+            updatedTracking[stage] = { completed: true, timestamp: now };
+          }
+        }
+      });
+    }
+
+    const updatedOrders = orders.map(o => o.id === orderId ? { ...o, status: newStatus, tracking: updatedTracking } : o);
     setOrders(updatedOrders);
     localStorage.setItem('orders', JSON.stringify(updatedOrders));
+
+    addPersistentNotification({
+      title: 'Order Status Updated',
+      message: `Your order #${orderId} is now ${newStatus}.`,
+      type: newStatus === 'Delivered' ? 'success' : newStatus === 'Cancelled' ? 'error' : 'info',
+      orderId: orderId
+    });
   };
 
   const getStatusColor = (status) => {
@@ -83,13 +112,15 @@ export function OrderManagement() {
                       className={`text-xs font-medium rounded-full px-2.5 py-1 border-0 focus:ring-2 focus:ring-primary-500 cursor-pointer ${
                         order.status === 'Delivered' ? 'bg-green-100 text-green-800' :
                         order.status === 'Cancelled' ? 'bg-red-100 text-red-800' :
-                        order.status === 'Shipped' ? 'bg-blue-100 text-blue-800' :
+                        order.status === 'Shipped' || order.status === 'OutForDelivery' ? 'bg-blue-100 text-blue-800' :
                         'bg-yellow-100 text-yellow-800'
                       }`}
                     >
+                      <option value="Pending">Pending</option>
                       <option value="Confirmed">Confirmed</option>
-                      <option value="Processing">Processing</option>
+                      <option value="Packed">Packed</option>
                       <option value="Shipped">Shipped</option>
+                      <option value="OutForDelivery">Out For Delivery</option>
                       <option value="Delivered">Delivered</option>
                       <option value="Cancelled">Cancelled</option>
                     </select>

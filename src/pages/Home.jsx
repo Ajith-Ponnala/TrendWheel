@@ -6,6 +6,7 @@ import { CategoryCard } from '../components/ui/CategoryCard';
 import { Button } from '../components/ui/Button';
 import { ProductCardSkeleton } from '../components/ui/LoadingSkeleton';
 import { ArrowRight, Truck, ShieldCheck, RefreshCw, Clock } from 'lucide-react';
+import { RecentlyViewed } from '../components/ui/RecentlyViewed';
 
 export function Home() {
   const [trendingProducts, setTrendingProducts] = useState([]);
@@ -164,6 +165,9 @@ export function Home() {
           }
         </div>
       </section>
+
+      {/* Recently Viewed */}
+      <RecentlyViewed />
 
       {/* 6. Why Trend Wheel? */}
       <section className="container mx-auto px-4 lg:px-8 border-t border-gray-200 dark:border-gray-800 pt-16">

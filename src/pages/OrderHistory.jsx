@@ -5,6 +5,7 @@ import { OrderService } from '../services/api';
 import { Package, ChevronRight } from 'lucide-react';
 import { EmptyState } from '../components/ui/EmptyState';
 import { Badge } from '../components/ui/Badge';
+import { OrderTrackingTimeline } from '../components/ui/OrderTrackingTimeline';
 
 export function OrderHistory() {
   const { user } = useAuth();
@@ -84,6 +85,13 @@ export function OrderHistory() {
               </div>
               
               <div className="p-6">
+                
+                {order.tracking && (
+                  <div className="mb-8 border-b border-gray-100 dark:border-gray-800 pb-8">
+                    <OrderTrackingTimeline tracking={order.tracking} status={order.status} />
+                  </div>
+                )}
+                
                 <div className="space-y-6">
                   {order.items.map((item, index) => (
                     <div key={index} className="flex gap-4">

@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Search, Heart, ShoppingBag, User, Menu, X, Sun, Moon } from 'lucide-react';
+import { Search, Heart, ShoppingBag, User, Menu, X, Sun, Moon, Bell } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
 import { useAuth } from '../../context/AuthContext';
+import { useNotification } from '../../context/NotificationContext';
 
 export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -13,6 +14,8 @@ export function Navbar() {
   const { wishlist } = useWishlist();
   const { user } = useAuth();
   const location = useLocation();
+  const { notifications, unreadCount, markAsRead, markAllAsRead, deleteNotification, clearAllNotifications } = useNotification();
+  const [isNotifOpen, setIsNotifOpen] = useState(false);
 
   const cartCount = getCartCount();
   const wishlistCount = wishlist.length;
@@ -90,6 +93,68 @@ export function Navbar() {
                 </span>
               )}
             </Link>
+            
+            {/* Notifications */}
+            {user && (
+              <div className="relative hidden sm:block">
+                <button 
+                  onClick={() => setIsNotifOpen(!isNotifOpen)}
+                  className="p-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 relative"
+                >
+                  <Bell className="h-5 w-5" />
+                  {unreadCount > 0 && (
+                    <span className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white">
+                      {unreadCount}
+                    </span>
+                  )}
+                </button>
+
+                {isNotifOpen && (
+                  <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-800 overflow-hidden z-50">
+                    <div className="p-4 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between">
+                      <h3 className="font-bold text-gray-900 dark:text-white">Notifications</h3>
+                      {unreadCount > 0 && (
+                        <button onClick={markAllAsRead} className="text-xs font-medium text-primary-600 hover:text-primary-700">
+                          Mark all read
+                        </button>
+                      )}
+                    </div>
+                    <div className="max-h-96 overflow-y-auto">
+                      {notifications.length === 0 ? (
+                        <div className="p-8 text-center text-gray-500 text-sm">
+                          No notifications yet.
+                        </div>
+                      ) : (
+                        notifications.slice(0, 10).map(notif => (
+                          <div 
+                            key={notif.id} 
+                            className={`p-4 border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50 cursor-pointer ${!notif.isRead ? 'bg-primary-50/50 dark:bg-primary-900/10' : ''}`}
+                            onClick={() => {
+                              markAsRead(notif.id);
+                              setIsNotifOpen(false);
+                            }}
+                          >
+                            <div className="flex justify-between items-start gap-2">
+                              <h4 className={`text-sm ${!notif.isRead ? 'font-bold text-gray-900 dark:text-white' : 'font-medium text-gray-700 dark:text-gray-300'}`}>
+                                {notif.title}
+                              </h4>
+                              <button onClick={(e) => { e.stopPropagation(); deleteNotification(notif.id); }} className="text-gray-400 hover:text-red-500">
+                                <X className="h-3 w-3" />
+                              </button>
+                            </div>
+                            <p className="text-xs text-gray-500 mt-1 line-clamp-2">{notif.message}</p>
+                            <span className="text-[10px] text-gray-400 mt-2 block">
+                              {new Date(notif.timestamp).toLocaleString()}
+                            </span>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
             <Link to={user ? "/profile" : "/login"} className="hidden sm:flex p-2 text-gray-600 dark:text-gray-300 hover:text-primary-600">
               <User className="h-5 w-5" />
             </Link>

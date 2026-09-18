@@ -51,10 +51,20 @@ export const OrderService = {
     const saved = localStorage.getItem('orders');
     const existingOrders = saved ? JSON.parse(saved) : mockOrders;
     
+    const now = new Date().toISOString();
     const newOrder = {
       id: `ORD-${Math.floor(Math.random() * 100000)}-${Math.floor(Math.random() * 100000)}`,
-      date: new Date().toISOString(),
-      status: 'Confirmed',
+      date: now,
+      status: 'Pending',
+      tracking: {
+        Pending: { completed: true, timestamp: now },
+        Confirmed: { completed: false, timestamp: null },
+        Packed: { completed: false, timestamp: null },
+        Shipped: { completed: false, timestamp: null },
+        OutForDelivery: { completed: false, timestamp: null },
+        Delivered: { completed: false, timestamp: null },
+        Cancelled: { completed: false, timestamp: null }
+      },
       ...orderData
     };
     
